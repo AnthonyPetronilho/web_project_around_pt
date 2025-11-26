@@ -29,48 +29,64 @@ initialCards.forEach(function (card) {
   console.log(card.name);
 });
 
+const editModal = document.querySelector("#edit-popup");
 const editButton = document.querySelector(".profile__edit-button");
-const closeButton = document.querySelector(".popup__close");
-const modal = document.querySelector("#edit-popup");
+const editCloseButton = editModal.querySelector(".popup__close");
+
+const formElement = document.querySelector("#edit-profile-form");
+const nameInput = editModal.querySelector(".popup__input_type_name");
+const jobInput = editModal.querySelector(".popup__input_type_description");
+const profileTitle = document.querySelector(".profile__title");
+const profileDescription = document.querySelector(".profile__description");
 
 function openModal(modal) {
   modal.classList.add("popup_is-opened");
+  document.addEventListener("keydown", handleEscClose);
 }
 
 function closeModal(modal) {
   modal.classList.remove("popup_is-opened");
+  document.removeEventListener("keydown", handleEscClose);
 }
 
-editButton.addEventListener("click", () => openModal(modal));
-closeButton.addEventListener("click", () => closeModal(modal));
+function handleEscClose(evt) {
+  if (evt.key === "Escape") {
+    const opened = document.querySelector(".popup.popup_is-opened");
+    if (opened) closeModal(opened);
+  }
+}
+
+editModal.addEventListener("mousedown", (evt) => {
+  if (evt.target === editModal) {
+    closeModal(editModal);
+  }
+});
 
 function fillProfileForm() {
-  const currentName = document.querySelector(".profile__title").textContent;
-  const currentAbout = document.querySelector(
-    ".profile__description"
-  ).textContent;
-
-  document.querySelector("#name-input").value = currentName;
-  document.querySelector("#about-input").value = currentAbout;
+  nameInput.value = profileTitle.textContent.trim();
+  jobInput.value = profileDescription.textContent.trim();
 }
 
 function handleOpenEditModal() {
   fillProfileForm();
-  openModal(modal);
+  openModal(editModal);
 }
 
-editButton.addEventListener("click", handleOpenEditModal);
+if (editButton) {
+  editButton.addEventListener("click", handleOpenEditModal);
+}
 
-formElement.addEventListener("submit", handleProfileFormSubmit);
+if (editCloseButton) {
+  editCloseButton.addEventListener("click", () => closeModal(editModal));
+}
 
 function handleProfileFormSubmit(evt) {
   evt.preventDefault();
 
-  let nameValue = nameInput.value;
-  let aboutValue = jobInput.value;
+  profileTitle.textContent = nameInput.value;
+  profileDescription.textContent = jobInput.value;
 
-  profileTitle.textContent = nameValue;
-  profileDescription.textContent = aboutValue;
-
-  closeModal(modal);
+  closeModal(editModal);
 }
+
+formElement.addEventListener("submit", handleProfileFormSubmit);
