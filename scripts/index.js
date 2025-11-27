@@ -92,7 +92,7 @@ function handleEscClose(evt) {
   }
 }
 
-// Fecha ao clicar no overlay (somente para o edit-popup por enquanto)
+// Fecha ao clicar no overlay (edit-popup)
 editModal.addEventListener("mousedown", (evt) => {
   if (evt.target === editModal) {
     closeModal(editModal);
@@ -127,3 +127,51 @@ function handleProfileFormSubmit(evt) {
 }
 
 formElement.addEventListener("submit", handleProfileFormSubmit);
+
+// =========================
+// Popup "Novo Local" e novo cartão
+// =========================
+const newCardModal = document.querySelector("#new-card-popup");
+const addCardButton = document.querySelector(".profile__add-button");
+const newCardCloseButton = newCardModal.querySelector(".popup__close");
+const newCardForm = document.querySelector("#new-card-form");
+const newCardNameInput = newCardForm.querySelector(
+  ".popup__input_type_card-name"
+);
+const newCardLinkInput = newCardForm.querySelector(".popup__input_type_url");
+
+// Abrir o popup ao clicar no "+"
+if (addCardButton) {
+  addCardButton.addEventListener("click", () => openModal(newCardModal));
+}
+
+// Fechar pelo botão de fechar
+if (newCardCloseButton) {
+  newCardCloseButton.addEventListener("click", () => closeModal(newCardModal));
+}
+
+// Fechar ao clicar no overlay
+newCardModal.addEventListener("mousedown", (evt) => {
+  if (evt.target === newCardModal) {
+    closeModal(newCardModal);
+  }
+});
+
+// Manipulador do formulário "Novo Local"
+function handleCardFormSubmit(evt) {
+  evt.preventDefault();
+
+  // Trim e fallback para acionar os padrões se necessário
+  const name = newCardNameInput.value.trim() || undefined;
+  const link = newCardLinkInput.value.trim() || undefined;
+
+  // Adiciona o novo cartão no início
+  renderCard(name, link, cardsContainer);
+
+  // Limpa o formulário e fecha o popup
+  newCardForm.reset();
+  closeModal(newCardModal);
+}
+
+// Ouve o submit do formulário "Novo Local"
+newCardForm.addEventListener("submit", handleCardFormSubmit);
