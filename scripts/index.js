@@ -1,3 +1,4 @@
+// Cartões iniciais
 const initialCards = [
   {
     name: "Vale de Yosemite",
@@ -25,10 +26,45 @@ const initialCards = [
   },
 ];
 
-initialCards.forEach(function (card) {
-  console.log(card.name);
+// =========================
+// Template e renderização
+// =========================
+const cardsContainer = document.querySelector(".cards__list");
+const cardTemplate = document
+  .querySelector("#card-template")
+  .content.querySelector(".card");
+
+// Cria um elemento de cartão a partir do template, com valores padrão
+function getCardElement(
+  name = "Lugar sem nome",
+  link = "./images/placeholder.jpg"
+) {
+  const cardElement = cardTemplate.cloneNode(true);
+
+  const cardTitle = cardElement.querySelector(".card__title");
+  const cardImage = cardElement.querySelector(".card__image");
+
+  cardTitle.textContent = name;
+  cardImage.src = link;
+  cardImage.alt = name;
+
+  return cardElement;
+}
+
+// Adiciona o cartão ao início do container
+function renderCard(name, link, container) {
+  const card = getCardElement(name, link);
+  container.prepend(card);
+}
+
+// Renderiza os cartões iniciais
+initialCards.forEach((card) => {
+  renderCard(card.name, card.link, cardsContainer);
 });
 
+// =========================
+// Lógica do popup de perfil
+// =========================
 const editModal = document.querySelector("#edit-popup");
 const editButton = document.querySelector(".profile__edit-button");
 const editCloseButton = editModal.querySelector(".popup__close");
@@ -56,6 +92,7 @@ function handleEscClose(evt) {
   }
 }
 
+// Fecha ao clicar no overlay (somente para o edit-popup por enquanto)
 editModal.addEventListener("mousedown", (evt) => {
   if (evt.target === editModal) {
     closeModal(editModal);
