@@ -1,108 +1,31 @@
-// Aguarda o DOM para garantir que #card-template exista antes de usá-lo
+const initialCards = [
+  {
+    name: "Vale de Yosemite",
+    link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_yosemite.jpg",
+  },
+  {
+    name: "Lago Louise",
+    link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_lake-louise.jpg",
+  },
+  {
+    name: "Montanhas Carecas",
+    link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_bald-mountains.jpg",
+  },
+  {
+    name: "Latemar",
+    link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_latemar.jpg",
+  },
+  {
+    name: "Parque Nacional Vanoise",
+    link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_vanoise.jpg",
+  },
+  {
+    name: "Lago di Braies",
+    link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_lago.jpg",
+  },
+];
+
 document.addEventListener("DOMContentLoaded", () => {
-  // =========================
-  // Cartões iniciais
-  // =========================
-  const initialCards = [
-    {
-      name: "Vale de Yosemite",
-      link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_yosemite.jpg",
-    },
-    {
-      name: "Lago Louise",
-      link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_lake-louise.jpg",
-    },
-    {
-      name: "Montanhas Carecas",
-      link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_bald-mountains.jpg",
-    },
-    {
-      name: "Latemar",
-      link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_latemar.jpg",
-    },
-    {
-      name: "Parque Nacional Vanoise",
-      link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_vanoise.jpg",
-    },
-    {
-      name: "Lago di Braies",
-      link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_lago.jpg",
-    },
-  ];
-
-  // =========================
-  // Template e renderização
-  // =========================
-  const cardsContainer = document.querySelector(".cards__list");
-  const templateNode = document.querySelector("#card-template");
-
-  if (!cardsContainer) {
-    console.error('Container ".cards__list" não encontrado.');
-  }
-  if (!templateNode) {
-    console.error(
-      'Template "#card-template" não encontrado. Os cartões não serão renderizados.'
-    );
-  }
-
-  const cardTemplate = templateNode
-    ? templateNode.content.querySelector(".card")
-    : null;
-
-  // Handler do like
-  function handleLikeButton(evt) {
-    evt.target.classList.toggle("card__like-button_is-active");
-  }
-
-  // Cria um elemento de cartão a partir do template, com valores padrão
-  function getCardElement(
-    name = "Lugar sem nome",
-    link = "./images/placeholder.jpg"
-  ) {
-    if (!cardTemplate) return null;
-
-    const cardElement = cardTemplate.cloneNode(true);
-    const cardTitle = cardElement.querySelector(".card__title");
-    const cardImage = cardElement.querySelector(".card__image");
-    const likeButton = cardElement.querySelector(".card__like-button");
-
-    cardTitle.textContent = name;
-    cardImage.src = link;
-    cardImage.alt = name;
-
-    likeButton.addEventListener("click", handleLikeButton);
-
-    return cardElement;
-  }
-
-  // Adiciona o cartão ao início do container
-  function renderCard(name, link, container) {
-    const card = getCardElement(name, link);
-    if (card && container) {
-      container.prepend(card);
-    }
-  }
-
-  // Renderiza os cartões iniciais somente se o template existir
-  if (cardTemplate && cardsContainer) {
-    initialCards.forEach((card) => {
-      renderCard(card.name, card.link, cardsContainer);
-    });
-  }
-
-  // =========================
-  // Pop-up: Editar perfil
-  // =========================
-  const editModal = document.querySelector("#edit-popup");
-  const editButton = document.querySelector(".profile__edit-button");
-  const editCloseButton = editModal?.querySelector(".popup__close");
-
-  const formElement = document.querySelector("#edit-profile-form");
-  const nameInput = editModal?.querySelector(".popup__input_type_name");
-  const jobInput = editModal?.querySelector(".popup__input_type_description");
-  const profileTitle = document.querySelector(".profile__title");
-  const profileDescription = document.querySelector(".profile__description");
-
   function openModal(modal) {
     modal.classList.add("popup_is-opened");
     document.addEventListener("keydown", handleEscClose);
@@ -120,11 +43,86 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Fechar ao clicar no overlay (editar perfil)
+  const imageModal = document.querySelector("#image-popup");
+  const imageCloseButton = imageModal?.querySelector(".popup__close");
+  const popupImage = imageModal?.querySelector(".popup__image");
+  const popupCaption = imageModal?.querySelector(".popup__caption");
+
+  imageCloseButton?.addEventListener("click", () => closeModal(imageModal));
+  imageModal?.addEventListener("mousedown", (evt) => {
+    if (evt.target === imageModal) closeModal(imageModal);
+  });
+
+  const cardsContainer = document.querySelector(".cards__list");
+  const templateNode = document.querySelector("#card-template");
+  const cardTemplate = templateNode
+    ? templateNode.content.querySelector(".card")
+    : null;
+
+  function handleLikeButton(evt) {
+    evt.target.classList.toggle("card__like-button_is-active");
+  }
+
+  function handleDeleteButton(cardElement) {
+    cardElement.remove();
+  }
+
+  function getCardElement(
+    name = "Lugar sem nome",
+    link = "./images/placeholder.jpg"
+  ) {
+    if (!cardTemplate) return null;
+
+    const cardElement = cardTemplate.cloneNode(true);
+    const cardTitle = cardElement.querySelector(".card__title");
+    const cardImage = cardElement.querySelector(".card__image");
+    const likeButton = cardElement.querySelector(".card__like-button");
+    const deleteButton = cardElement.querySelector(".card__delete-button");
+
+    cardTitle.textContent = name;
+    cardImage.src = link;
+    cardImage.alt = name;
+
+    likeButton.addEventListener("click", handleLikeButton);
+
+    deleteButton.addEventListener("click", () =>
+      handleDeleteButton(cardElement)
+    );
+
+    cardImage.addEventListener("click", () => {
+      if (!imageModal || !popupImage || !popupCaption) return;
+      popupImage.src = link || "./images/placeholder.jpg";
+      popupImage.alt = name || "Lugar sem nome";
+      popupCaption.textContent = name || "Lugar sem nome";
+      openModal(imageModal);
+    });
+
+    return cardElement;
+  }
+
+  function renderCard(name, link, container) {
+    const card = getCardElement(name, link);
+    if (card && container) container.prepend(card);
+  }
+
+  if (cardTemplate && cardsContainer) {
+    initialCards.forEach((card) =>
+      renderCard(card.name, card.link, cardsContainer)
+    );
+  }
+
+  const editModal = document.querySelector("#edit-popup");
+  const editButton = document.querySelector(".profile__edit-button");
+  const editCloseButton = editModal?.querySelector(".popup__close");
+
+  const formElement = document.querySelector("#edit-profile-form");
+  const nameInput = editModal?.querySelector(".popup__input_type_name");
+  const jobInput = editModal?.querySelector(".popup__input_type_description");
+  const profileTitle = document.querySelector(".profile__title");
+  const profileDescription = document.querySelector(".profile__description");
+
   editModal?.addEventListener("mousedown", (evt) => {
-    if (evt.target === editModal) {
-      closeModal(editModal);
-    }
+    if (evt.target === editModal) closeModal(editModal);
   });
 
   function fillProfileForm() {
@@ -152,9 +150,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   formElement?.addEventListener("submit", handleProfileFormSubmit);
 
-  // =========================
-  // Pop-up: Novo Local
-  // =========================
   const newCardModal = document.querySelector("#new-card-popup");
   const addCardButton = document.querySelector(".profile__add-button");
   const newCardCloseButton = newCardModal?.querySelector(".popup__close");
@@ -164,7 +159,6 @@ document.addEventListener("DOMContentLoaded", () => {
   );
   const newCardLinkInput = newCardForm?.querySelector(".popup__input_type_url");
 
-  // Abrir/fechar/overlay
   addCardButton?.addEventListener(
     "click",
     () => newCardModal && openModal(newCardModal)
@@ -174,12 +168,9 @@ document.addEventListener("DOMContentLoaded", () => {
     () => newCardModal && closeModal(newCardModal)
   );
   newCardModal?.addEventListener("mousedown", (evt) => {
-    if (evt.target === newCardModal) {
-      closeModal(newCardModal);
-    }
+    if (evt.target === newCardModal) closeModal(newCardModal);
   });
 
-  // Submit: cria novo cartão no topo
   function handleCardFormSubmit(evt) {
     evt.preventDefault();
     const name = (newCardNameInput?.value || "").trim() || undefined;
