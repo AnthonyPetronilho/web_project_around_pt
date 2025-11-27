@@ -38,3 +38,7 @@ Este projeto implementa uma página onde usuários podem:
 - HTML5 (estrutura semântica)
 - CSS3 (BEM, responsividade)
 - JavaScript (DOM, eventos, manipulação de classes)
+
+## Link para o projeto
+
+https://anthonypetronilho.github.io/web_project_around_pt/
