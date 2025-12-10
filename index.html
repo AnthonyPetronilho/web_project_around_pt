@@ -72,20 +72,48 @@
             type="button"
           ></button>
           <h3 class="popup__title">Editar perfil</h3>
-          <form class="popup__form" id="edit-profile-form">
-            <input
-              class="popup__input popup__input_type_name"
-              name="name"
-              placeholder="Nome"
-              type="text"
-            />
-            <input
-              class="popup__input popup__input_type_description"
-              name="description"
-              placeholder="Sobre mim"
-              type="text"
-            />
-            <button class="button popup__button" type="submit">Salvar</button>
+          <form class="popup__form" id="edit-profile-form" novalidate>
+            <label class="popup__field">
+              <input
+                class="popup__input popup__input_type_name"
+                id="edit-name"
+                name="name"
+                placeholder="Nome"
+                type="text"
+                required
+                minlength="2"
+                maxlength="40"
+                aria-describedby="edit-name-error"
+              />
+              <span
+                class="popup__input-error"
+                id="edit-name-error"
+                aria-live="polite"
+              ></span>
+            </label>
+
+            <label class="popup__field">
+              <input
+                class="popup__input popup__input_type_description"
+                id="edit-about"
+                name="description"
+                placeholder="Sobre mim"
+                type="text"
+                required
+                minlength="2"
+                maxlength="200"
+                aria-describedby="edit-about-error"
+              />
+              <span
+                class="popup__input-error"
+                id="edit-about-error"
+                aria-live="polite"
+              ></span>
+            </label>
+
+            <button class="button popup__button" type="submit" disabled>
+              Salvar
+            </button>
           </form>
         </div>
       </div>
@@ -98,22 +126,46 @@
             type="button"
           ></button>
           <h3 class="popup__title">Novo local</h3>
-          <form class="popup__form" id="new-card-form">
-            <input
-              class="popup__input popup__input_type_card-name"
-              name="place-name"
-              placeholder="Título"
-              required
-              type="text"
-            />
-            <input
-              class="popup__input popup__input_type_url"
-              name="link"
-              placeholder="Link de Imagem"
-              required
-              type="url"
-            />
-            <button class="button popup__button" type="submit">Criar</button>
+          <form class="popup__form" id="new-card-form" novalidate>
+            <label class="popup__field">
+              <input
+                class="popup__input popup__input_type_card-name"
+                id="new-card-title"
+                name="place-name"
+                placeholder="Título"
+                type="text"
+                required
+                minlength="2"
+                maxlength="30"
+                aria-describedby="new-card-title-error"
+              />
+              <span
+                class="popup__input-error"
+                id="new-card-title-error"
+                aria-live="polite"
+              ></span>
+            </label>
+
+            <label class="popup__field">
+              <input
+                class="popup__input popup__input_type_url"
+                id="new-card-link"
+                name="link"
+                placeholder="Link de Imagem"
+                type="url"
+                required
+                aria-describedby="new-card-link-error"
+              />
+              <span
+                class="popup__input-error"
+                id="new-card-link-error"
+                aria-live="polite"
+              ></span>
+            </label>
+
+            <button class="button popup__button" type="submit" disabled>
+              Criar
+            </button>
           </form>
         </div>
       </div>
