@@ -9,7 +9,6 @@ class Card {
 
   generateCard() {
     this._element = this._getTemplate();
-    console.log("teste");
 
     this._cardTitle = this._element.querySelector(".card__title");
     this._cardImage = this._element.querySelector(".card__image");
