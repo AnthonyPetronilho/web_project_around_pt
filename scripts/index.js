@@ -1,4 +1,5 @@
-// ===== Dados iniciais =====
+import Card from "./Card.js";
+
 const initialCards = [
   {
     name: "Vale de Yosemite",
@@ -57,42 +58,17 @@ const cardTemplate = templateNode
   ? templateNode.content.querySelector(".card")
   : null;
 
-function handleLikeButton(evt) {
-  evt.target.classList.toggle("card__like-button_is-active");
-}
-function handleDeleteButton(cardElement) {
-  cardElement.remove();
-}
+const handleImageClick = (card) => {
+  popupImage.src = card._link;
+  popupImage.alt = card._name;
+  popupCaption.textContent = card._name;
+  openModal(imageModal);
+};
 
-function getCardElement(name, link) {
-  if (!cardTemplate) return null;
-
-  const cardElement = cardTemplate.cloneNode(true);
-  const cardTitle = cardElement.querySelector(".card__title");
-  const cardImage = cardElement.querySelector(".card__image");
-  const likeButton = cardElement.querySelector(".card__like-button");
-  const deleteButton = cardElement.querySelector(".card__delete-button");
-
-  cardTitle.textContent = name;
-  cardImage.src = link;
-  cardImage.alt = name;
-
-  likeButton.addEventListener("click", handleLikeButton);
-  deleteButton.addEventListener("click", () => handleDeleteButton(cardElement));
-
-  cardImage.addEventListener("click", () => {
-    if (!imageModal || !popupImage || !popupCaption) return;
-    popupImage.src = link;
-    popupImage.alt = name;
-    popupCaption.textContent = name;
-    openModal(imageModal);
-  });
-
-  return cardElement;
-}
+export { handleImageClick };
 
 function renderCard(name, link, container) {
-  const card = getCardElement(name, link);
+  const card = new Card(name, link).generateCard();
   if (card && container) container.prepend(card);
 }
 
