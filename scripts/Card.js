@@ -1,10 +1,9 @@
-import { handleImageClick } from "./index.js";
+import { handleImageClick } from "./utils.js";
 
 class Card {
-  constructor(name, link, cardSelector) {
+  constructor(name, link) {
     this._name = name;
     this._link = link;
-    this.cardSelector = cardSelector;
   }
 
   generateCard() {

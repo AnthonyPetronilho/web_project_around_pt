@@ -1,4 +1,6 @@
 import Card from "./Card.js";
+import FormValidator from "./FormValidator.js";
+import { validationConfig, handleImageClick } from "./utils.js";
 
 const initialCards = [
   {
@@ -58,15 +60,6 @@ const cardTemplate = templateNode
   ? templateNode.content.querySelector(".card")
   : null;
 
-const handleImageClick = (card) => {
-  popupImage.src = card._link;
-  popupImage.alt = card._name;
-  popupCaption.textContent = card._name;
-  openModal(imageModal);
-};
-
-export { handleImageClick };
-
 function renderCard(name, link, container) {
   const card = new Card(name, link).generateCard();
   if (card && container) container.prepend(card);
@@ -99,41 +92,8 @@ function fillProfileForm() {
   jobInput.value = profileDescription.textContent.trim();
 }
 
-function showInputError(input) {
-  const errorEl = editModal?.querySelector(`#${input.id}-error`);
-  if (!errorEl) return;
-  errorEl.textContent = input.validationMessage;
-  errorEl.classList.add("popup__input-error_active");
-  input.classList.add("popup__input_type_error");
-}
-function hideInputError(input) {
-  const errorEl = editModal?.querySelector(`#${input.id}-error`);
-  if (!errorEl) return;
-  errorEl.textContent = "";
-  errorEl.classList.remove("popup__input-error_active");
-  input.classList.remove("popup__input_type_error");
-}
-function checkInputValidity(input) {
-  if (!input.checkValidity()) {
-    showInputError(input);
-  } else {
-    hideInputError(input);
-  }
-}
-function toggleSaveButtonState() {
-  if (!formElement || !saveButton || !nameInput || !jobInput) return;
-  const formIsValid = nameInput.checkValidity() && jobInput.checkValidity();
-  saveButton.disabled = !formIsValid;
-  saveButton.classList.toggle("popup__button_disabled", !formIsValid);
-}
-
 function handleOpenEditModal() {
   fillProfileForm();
-
-  if (nameInput) hideInputError(nameInput);
-  if (jobInput) hideInputError(jobInput);
-
-  toggleSaveButtonState();
 
   if (editModal) openModal(editModal);
 }
@@ -141,24 +101,9 @@ function handleOpenEditModal() {
 editButton?.addEventListener("click", handleOpenEditModal);
 editCloseButton?.addEventListener("click", () => closeModal(editModal));
 
-[nameInput, jobInput].forEach((input) => {
-  input?.addEventListener("input", () => {
-    if (!input) return;
-    checkInputValidity(input);
-    toggleSaveButtonState();
-  });
-});
-
 function handleProfileFormSubmit(evt) {
   evt.preventDefault();
   if (!formElement || !nameInput || !jobInput) return;
-
-  if (!formElement.checkValidity()) {
-    checkInputValidity(nameInput);
-    checkInputValidity(jobInput);
-    toggleSaveButtonState();
-    return;
-  }
 
   profileTitle.textContent = nameInput.value;
   profileDescription.textContent = jobInput.value;
@@ -183,65 +128,17 @@ newCardCloseButton?.addEventListener(
   () => newCardModal && closeModal(newCardModal)
 );
 
-function showNewCardInputError(input) {
-  const errorEl = newCardModal?.querySelector(`#${input.id}-error`);
-  if (!errorEl) return;
-  errorEl.textContent = input.validationMessage;
-  errorEl.classList.add("popup__input-error_active");
-  input.classList.add("popup__input_type_error");
-}
-function hideNewCardInputError(input) {
-  const errorEl = newCardModal?.querySelector(`#${input.id}-error`);
-  if (!errorEl) return;
-  errorEl.textContent = "";
-  errorEl.classList.remove("popup__input-error_active");
-  input.classList.remove("popup__input_type_error");
-}
-function checkNewCardInputValidity(input) {
-  if (!input.checkValidity()) {
-    showNewCardInputError(input);
-  } else {
-    hideNewCardInputError(input);
-  }
-}
-function toggleNewCardButtonState() {
-  if (!newCardSaveButton || !newCardNameInput || !newCardLinkInput) return;
-  const formIsValid =
-    newCardNameInput.checkValidity() && newCardLinkInput.checkValidity();
-  newCardSaveButton.disabled = !formIsValid;
-  newCardSaveButton.classList.toggle("popup__button_disabled", !formIsValid);
-}
-
 function handleOpenNewCardModal() {
   newCardForm?.reset();
 
-  if (newCardNameInput) hideNewCardInputError(newCardNameInput);
-  if (newCardLinkInput) hideNewCardInputError(newCardLinkInput);
-
-  toggleNewCardButtonState();
   if (newCardModal) openModal(newCardModal);
 }
 
 addCardButton?.addEventListener("click", handleOpenNewCardModal);
 
-[newCardNameInput, newCardLinkInput].forEach((input) => {
-  input?.addEventListener("input", () => {
-    if (!input) return;
-    checkNewCardInputValidity(input);
-    toggleNewCardButtonState();
-  });
-});
-
 function handleCardFormSubmit(evt) {
   evt.preventDefault();
   if (!newCardForm || !newCardNameInput || !newCardLinkInput) return;
-
-  if (!newCardForm.checkValidity()) {
-    checkNewCardInputValidity(newCardNameInput);
-    checkNewCardInputValidity(newCardLinkInput);
-    toggleNewCardButtonState();
-    return;
-  }
 
   const name = newCardNameInput.value.trim();
   const link = newCardLinkInput.value.trim();
@@ -253,3 +150,8 @@ function handleCardFormSubmit(evt) {
   if (newCardModal) closeModal(newCardModal);
 }
 newCardForm?.addEventListener("submit", handleCardFormSubmit);
+
+const profileValidator = new FormValidator(validationConfig, formElement);
+profileValidator.enableValidation();
+const cardValidator = new FormValidator(validationConfig, newCardForm);
+cardValidator.enableValidation();
