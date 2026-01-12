@@ -17,4 +17,25 @@ const handleImageClick = (card) => {
   openModal(imageModal);
 };
 
-export { validationConfig, handleImageClick };
+function openModal(modal) {
+  modal.classList.add("popup_is-opened");
+  document.addEventListener("keydown", handleEscClose);
+}
+function closeModal(modal) {
+  modal.classList.remove("popup_is-opened");
+  document.removeEventListener("keydown", handleEscClose);
+}
+function handleEscClose(evt) {
+  if (evt.key === "Escape") {
+    const opened = document.querySelector(".popup.popup_is-opened");
+    if (opened) closeModal(opened);
+  }
+}
+
+export {
+  imageModal,
+  validationConfig,
+  handleImageClick,
+  openModal,
+  closeModal,
+};

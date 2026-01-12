@@ -1,6 +1,11 @@
 import Card from "./Card.js";
 import FormValidator from "./FormValidator.js";
-import { validationConfig, handleImageClick } from "./utils.js";
+import {
+  imageModal,
+  validationConfig,
+  openModal,
+  closeModal,
+} from "./utils.js";
 
 const initialCards = [
   {
@@ -29,25 +34,7 @@ const initialCards = [
   },
 ];
 
-function openModal(modal) {
-  modal.classList.add("popup_is-opened");
-  document.addEventListener("keydown", handleEscClose);
-}
-function closeModal(modal) {
-  modal.classList.remove("popup_is-opened");
-  document.removeEventListener("keydown", handleEscClose);
-}
-function handleEscClose(evt) {
-  if (evt.key === "Escape") {
-    const opened = document.querySelector(".popup.popup_is-opened");
-    if (opened) closeModal(opened);
-  }
-}
-
-const imageModal = document.querySelector("#image-popup");
 const imageCloseButton = imageModal?.querySelector(".popup__close");
-const popupImage = imageModal?.querySelector(".popup__image");
-const popupCaption = imageModal?.querySelector(".popup__caption");
 
 imageCloseButton?.addEventListener("click", () => closeModal(imageModal));
 imageModal?.addEventListener("mousedown", (evt) => {
@@ -80,7 +67,6 @@ const nameInput = document.getElementById("edit-name");
 const jobInput = document.getElementById("edit-about");
 const profileTitle = document.querySelector(".profile__title");
 const profileDescription = document.querySelector(".profile__description");
-const saveButton = formElement?.querySelector(".popup__button");
 
 editModal?.addEventListener("mousedown", (evt) => {
   if (evt.target === editModal) closeModal(editModal);
@@ -118,7 +104,6 @@ const newCardCloseButton = newCardModal?.querySelector(".popup__close");
 const newCardForm = document.querySelector("#new-card-form");
 const newCardNameInput = document.getElementById("new-card-title");
 const newCardLinkInput = document.getElementById("new-card-link");
-const newCardSaveButton = newCardForm?.querySelector(".popup__button");
 
 newCardModal?.addEventListener("mousedown", (evt) => {
   if (evt.target === newCardModal) closeModal(newCardModal);
