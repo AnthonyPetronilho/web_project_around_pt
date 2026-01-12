@@ -37,7 +37,7 @@ Este projeto implementa uma página onde usuários podem:
 
 - HTML5 (estrutura semântica)
 - CSS3 (BEM, responsividade)
-- JavaScript (DOM, eventos, manipulação de classes)
+- JavaScript (DOM, eventos, manipulação de classes, POO)
 
 ## Link para o projeto
 
