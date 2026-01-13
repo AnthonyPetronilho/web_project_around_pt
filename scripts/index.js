@@ -105,8 +105,7 @@ function handleCardFormSubmit(evt) {
   renderCard(name, link, cardsContainer);
 
   newCardForm.reset();
-  toggleNewCardButtonState();
-  if (newCardModal) closeModal(newCardModal);
+  closeModal(newCardModal);
 }
 newCardForm?.addEventListener("submit", handleCardFormSubmit);
 
