@@ -1,9 +1,8 @@
-import { handleImageClick } from "./utils.js";
-
 class Card {
-  constructor(name, link) {
+  constructor(name, link, handleCardClick) {
     this._name = name;
     this._link = link;
+    this._handleCardClick = handleCardClick;
   }
 
   generateCard() {
@@ -18,7 +17,7 @@ class Card {
     this._cardImage.src = this._link;
     this._cardImage.alt = this._name;
 
-    this._setEventLisnteners();
+    this._setEventListeners();
     return this._element;
   }
 
@@ -38,10 +37,12 @@ class Card {
     this._element = null;
   };
 
-  _setEventLisnteners() {
+  _setEventListeners() {
     this._likeButton.addEventListener("click", this._handleLikeButton);
     this._deleteButton.addEventListener("click", this._handleDeleteButton);
-    this._cardImage.addEventListener("click", () => handleImageClick(this));
+    this._cardImage.addEventListener("click", () => {
+      this._handleCardClick(this._name, this._link);
+    });
   }
 }
 
