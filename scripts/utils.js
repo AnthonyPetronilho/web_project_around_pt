@@ -1,6 +1,6 @@
-const imageModal = document.querySelector("#image-popup");
-const popupImage = imageModal?.querySelector(".popup__image");
-const popupCaption = imageModal?.querySelector(".popup__caption");
+// const imageModal = document.querySelector("#image-popup");
+// const popupImage = imageModal?.querySelector(".popup__image");
+// const popupCaption = imageModal?.querySelector(".popup__caption");
 
 const initialCards = [
   {
@@ -37,33 +37,33 @@ const validationConfig = {
   errorClass: "popup__input-error_active",
 };
 
-const handleImageClick = (card) => {
-  popupImage.src = card._link;
-  popupImage.alt = card._name;
-  popupCaption.textContent = card._name;
-  openModal(imageModal);
-};
+// const handleImageClick = (card) => {
+//   popupImage.src = card._link;
+//   popupImage.alt = card._name;
+//   popupCaption.textContent = card._name;
+//   openModal(imageModal);
+// };
 
-function openModal(modal) {
-  modal.classList.add("popup_is-opened");
-  document.addEventListener("keydown", handleEscClose);
-}
-function closeModal(modal) {
-  modal.classList.remove("popup_is-opened");
-  document.removeEventListener("keydown", handleEscClose);
-}
-function handleEscClose(evt) {
-  if (evt.key === "Escape") {
-    const opened = document.querySelector(".popup.popup_is-opened");
-    if (opened) closeModal(opened);
-  }
-}
+// function openModal(modal) {
+//   modal.classList.add("popup_is-opened");
+//   document.addEventListener("keydown", handleEscClose);
+// }
+// function closeModal(modal) {
+//   modal.classList.remove("popup_is-opened");
+//   document.removeEventListener("keydown", handleEscClose);
+// }
+// function handleEscClose(evt) {
+//   if (evt.key === "Escape") {
+//     const opened = document.querySelector(".popup.popup_is-opened");
+//     if (opened) closeModal(opened);
+//   }
+// }
 
 export {
-  imageModal,
+  //imageModal,
   initialCards,
   validationConfig,
-  handleImageClick,
-  openModal,
-  closeModal,
+  //handleImageClick,
+  //openModal,
+  //closeModal,
 };
