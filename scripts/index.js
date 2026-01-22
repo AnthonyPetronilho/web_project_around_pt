@@ -1,8 +1,9 @@
 import PopupWithImage from "./components/PopupWithImage.js";
 import PopupWithForm from "./components/PopupWithForm.js";
-import Card from "./Card.js";
-import FormValidator from "./FormValidator.js";
+import Card from "./components/Card.js";
+import FormValidator from "./components/FormValidator.js";
 import { initialCards, validationConfig } from "./utils.js";
+import UserInfo from "./components/UserInfo.js";
 
 const imagePopup = new PopupWithImage("#image-popup");
 imagePopup.setEventListeners();
@@ -20,22 +21,30 @@ function renderCard(name, link) {
 
 initialCards.forEach((card) => renderCard(card.name, card.link));
 
-const profileTitle = document.querySelector(".profile__title");
-const profileDescription = document.querySelector(".profile__description");
+const userInfo = new UserInfo({
+  name: ".profile__title",
+  job: ".profile__description",
+});
 
 const editPopup = new PopupWithForm("#edit-popup", (inputValues) => {
-  profileTitle.textContent = inputValues.name;
-  profileDescription.textContent = inputValues.description;
+  userInfo.setUserInfo({
+    name: inputValues.name,
+    job: inputValues.description,
+  });
+
   editPopup.close();
 });
 editPopup.setEventListeners();
 
 const editButton = document.querySelector(".profile__edit-button");
 editButton.addEventListener("click", () => {
+  const currentUser = userInfo.getUserInfo();
+
   const nameInput = document.getElementById("edit-name");
-  const jobInput = document.getElementById("edit-about");
-  nameInput.value = profileTitle.textContent.trim();
-  jobInput.value = profileDescription.textContent.trim();
+  const aboutInput = document.getElementById("edit-about");
+
+  nameInput.value = currentUser.name;
+  aboutInput.value = currentUser.job;
 
   editPopup.open();
 });
