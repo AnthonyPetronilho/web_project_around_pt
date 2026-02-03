@@ -3,6 +3,11 @@ class Card {
     this._name = name;
     this._link = link;
     this._handleCardClick = handleCardClick;
+    //this._isLiked
+    //this._cardSelector
+    //this._imageClick
+    //this.-handleDelete
+    //this._handleLike
   }
 
   generateCard() {
@@ -41,7 +46,7 @@ class Card {
     this._likeButton.addEventListener("click", this._handleLikeButton);
     this._deleteButton.addEventListener("click", this._handleDeleteButton);
     this._cardImage.addEventListener("click", () => {
-      this._handleCardClick(this._name, this._link);
+      this._handleCardClick(this);
     });
   }
 }

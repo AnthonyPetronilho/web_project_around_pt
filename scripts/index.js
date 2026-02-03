@@ -1,8 +1,10 @@
 import PopupWithImage from "./components/PopupWithImage.js";
 import PopupWithForm from "./components/PopupWithForm.js";
+// import PopupWithConfirmation from "./components/PopupWithConfirmation.js";
 import Card from "./components/Card.js";
 import FormValidator from "./components/FormValidator.js";
 import { initialCards, validationConfig } from "./utils.js";
+import api from "./components/Api.js";
 import UserInfo from "./components/UserInfo.js";
 
 const imagePopup = new PopupWithImage("#image-popup");
@@ -26,14 +28,43 @@ const userInfo = new UserInfo({
   job: ".profile__description",
 });
 
-const editPopup = new PopupWithForm("#edit-popup", (inputValues) => {
-  userInfo.setUserInfo({
-    name: inputValues.name,
-    job: inputValues.description,
-  });
+api
+  .getUserInfo()
+  .then((userData) => {
+    userInfo.setUserInfo({
+      name: userData.name,
+      job: userData.about,
+    });
+  })
+  .catch((err) => console.log(err));
 
-  editPopup.close();
+api
+  .getInitialCards()
+  .then((cardsData) => {
+    cardsData.forEach((card) => {
+      renderCard(card.name, card.link);
+    });
+  })
+  .catch((err) => console.log(err));
+
+const editPopup = new PopupWithForm("#edit-popup", (inputValues) => {
+  api
+    .updateUserInfo({
+      name: inputValues.name,
+      about: inputValues.description,
+    })
+    .then((updatedUserData) => {
+      userInfo.setUserInfo({
+        name: updatedUserData.name,
+        job: updatedUserData.about,
+      });
+      editPopup.close();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
+
 editPopup.setEventListeners();
 
 const editButton = document.querySelector(".profile__edit-button");
@@ -53,9 +84,20 @@ const newCardPopup = new PopupWithForm("#new-card-popup", (inputValues) => {
   const name = inputValues["place-name"];
   const link = inputValues.link;
 
-  renderCard(name, link);
-  newCardPopup.close();
+  api
+    .addCard({
+      name: name,
+      link: link,
+    })
+    .then((newCardData) => {
+      renderCard(newCardData.name, newCardData.link);
+      newCardPopup.close();
+    })
+    .catch((err) => {
+      console.log("Erro ao adicionar cartão:", err);
+    });
 });
+
 newCardPopup.setEventListeners();
 
 const addCardButton = document.querySelector(".profile__add-button");
