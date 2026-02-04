@@ -8,4 +8,4 @@ const validationConfig = {
   errorClass: "popup__input-error_active",
 };
 
-export { initialCards, validationConfig };
+export { validationConfig };

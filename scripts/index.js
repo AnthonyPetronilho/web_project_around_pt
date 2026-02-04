@@ -3,7 +3,7 @@ import PopupWithForm from "./components/PopupWithForm.js";
 import PopupWithConfirmation from "./components/PopupWithConfirmation.js";
 import Card from "./components/Card.js";
 import FormValidator from "./components/FormValidator.js";
-import { initialCards, validationConfig } from "./utils.js";
+import { validationConfig } from "./utils.js";
 import api from "./components/Api.js";
 import UserInfo from "./components/UserInfo.js";
 
@@ -29,13 +29,11 @@ function renderCard(cardData) {
 
   cardsContainer.prepend(cardElement);
 }
-//nessa função precisa passar o ID e o estado (likeCard em api e generateCard em card)
-
-// initialCards.forEach((card) => renderCard(card.name, card.link));
 
 const userInfo = new UserInfo({
   name: ".profile__title",
   job: ".profile__description",
+  avatar: ".profile__image",
 });
 
 api
@@ -44,6 +42,7 @@ api
     userInfo.setUserInfo({
       name: userData.name,
       job: userData.about,
+      avatar: userData.avatar,
     });
   })
   .catch((err) => console.log(err));
@@ -51,10 +50,36 @@ api
 api
   .getInitialCards()
   .then((cardsData) => {
-    //console.log(cardsData);
     cardsData.forEach((card) => renderCard(card));
   })
   .catch((err) => console.log(err));
+
+//popup do avatar:
+const avatarPopup = new PopupWithForm("#avatar-popup", (inputValues) => {
+  api
+    .updateAvatar(inputValues.avatar)
+    .then((updatedUserData) => {
+      userInfo.setUserInfo({
+        name: updatedUserData.name,
+        job: updatedUserData.about,
+        avatar: updatedUserData.avatar,
+      });
+      avatarPopup.close();
+    })
+    .catch((err) => console.log("Erro ao atualizar avatar:", err));
+});
+
+avatarPopup.setEventListeners();
+
+const avatarEditButton = document.querySelector(".profile__avatar-edit-button");
+avatarEditButton.addEventListener("click", () => {
+  avatarValidator.resetValidation();
+  avatarPopup.open();
+});
+
+const avatarForm = document.querySelector("#avatar-form");
+const avatarValidator = new FormValidator(validationConfig, avatarForm);
+avatarValidator.enableValidation();
 
 //editar perfil
 const editPopup = new PopupWithForm("#edit-popup", (inputValues) => {

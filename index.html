@@ -19,7 +19,18 @@
 
       <main class="content">
         <section class="profile page__section">
-          <img class="profile__image" src="./images/avatar.jpg" alt="Avatar" />
+          <div class="profile__avatar-container">
+            <img
+              class="profile__image"
+              src="./images/avatar.jpg"
+              alt="Avatar"
+            />
+            <button
+              class="profile__avatar-edit-button"
+              type="button"
+              aria-label="Editar foto do perfil"
+            ></button>
+          </div>
           <div class="profile__info">
             <h1 class="profile__title">Jacques Cousteau</h1>
             <button
@@ -189,6 +200,39 @@
         <h3 class="popup__title">Tem certeza?</h3>
         <form class="popup__form" name="delete-form">
           <button class="popup__button" type="submit">Sim</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="popup" id="avatar-popup">
+      <div class="popup__content">
+        <button
+          aria-label="Fechar pop-up"
+          class="popup__close"
+          type="button"
+        ></button>
+        <h3 class="popup__title">Alterar foto do perfil</h3>
+        <form class="popup__form" id="avatar-form" novalidate>
+          <label class="popup__field">
+            <input
+              class="popup__input popup__input_type_url"
+              id="avatar-link"
+              name="avatar"
+              placeholder="Link da foto"
+              type="url"
+              required
+              aria-describedby="avatar-link-error"
+            />
+            <span
+              class="popup__input-error"
+              id="avatar-link-error"
+              aria-live="polite"
+            ></span>
+          </label>
+
+          <button class="button popup__button" type="submit" disabled>
+            Salvar
+          </button>
         </form>
       </div>
     </div>
