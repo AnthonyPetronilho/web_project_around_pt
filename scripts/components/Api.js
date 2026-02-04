@@ -50,18 +50,27 @@ class Api {
         name: cardData.name,
         link: cardData.link,
       }),
-    }).then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Erro: ${res.status}`);
-    });
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        return Promise.reject(`Erro: ${res.status}`);
+      })
+      .then((newCardData) => {
+        renderCard(newCardData);
+        newCardPopup.close();
+      });
   }
 
   likeCard(cardId) {
+    console.log("likeCard");
     return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
       method: "PUT",
       headers: this._headers,
+      //body: JSON.stringify({
+      //isLiked: true,
+      //}),
     }).then((res) => {
       if (res.ok) {
         return res.json();
@@ -72,8 +81,11 @@ class Api {
 
   unlikeCard(cardId) {
     return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
-      method: "DELETE",
+      method: "PUT",
       headers: this._headers,
+      //body: JSON.stringify({
+      //isLiked: false,
+      //}),
     }).then((res) => {
       if (res.ok) {
         return res.json();

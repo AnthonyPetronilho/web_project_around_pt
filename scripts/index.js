@@ -1,6 +1,6 @@
 import PopupWithImage from "./components/PopupWithImage.js";
 import PopupWithForm from "./components/PopupWithForm.js";
-// import PopupWithConfirmation from "./components/PopupWithConfirmation.js";
+import PopupWithConfirmation from "./components/PopupWithConfirmation.js";
 import Card from "./components/Card.js";
 import FormValidator from "./components/FormValidator.js";
 import { initialCards, validationConfig } from "./utils.js";
@@ -16,12 +16,22 @@ const handleImageClick = (name, link) => {
 
 const cardsContainer = document.querySelector(".cards__list");
 
-function renderCard(name, link) {
-  const cardElement = new Card(name, link, handleImageClick).generateCard();
+function renderCard(cardData) {
+  const cardElement = new Card(
+    {
+      name: cardData.name,
+      link: cardData.link,
+      id: cardData._id,
+      isLiked: cardData.isLiked,
+    },
+    handleImageClick,
+  ).generateCard();
+
   cardsContainer.prepend(cardElement);
 }
+//nessa função precisa passar o ID e o estado (likeCard em api e generateCard em card)
 
-initialCards.forEach((card) => renderCard(card.name, card.link));
+// initialCards.forEach((card) => renderCard(card.name, card.link));
 
 const userInfo = new UserInfo({
   name: ".profile__title",
@@ -41,12 +51,12 @@ api
 api
   .getInitialCards()
   .then((cardsData) => {
-    cardsData.forEach((card) => {
-      renderCard(card.name, card.link);
-    });
+    //console.log(cardsData);
+    cardsData.forEach((card) => renderCard(card));
   })
   .catch((err) => console.log(err));
 
+//editar perfil
 const editPopup = new PopupWithForm("#edit-popup", (inputValues) => {
   api
     .updateUserInfo({
@@ -80,6 +90,7 @@ editButton.addEventListener("click", () => {
   editPopup.open();
 });
 
+//novo card
 const newCardPopup = new PopupWithForm("#new-card-popup", (inputValues) => {
   const name = inputValues["place-name"];
   const link = inputValues.link;
