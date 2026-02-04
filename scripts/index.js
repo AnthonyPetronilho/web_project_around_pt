@@ -96,12 +96,9 @@ const newCardPopup = new PopupWithForm("#new-card-popup", (inputValues) => {
   const link = inputValues.link;
 
   api
-    .addCard({
-      name: name,
-      link: link,
-    })
+    .addCard({ name, link })
     .then((newCardData) => {
-      renderCard(newCardData.name, newCardData.link);
+      renderCard(newCardData);
       newCardPopup.close();
     })
     .catch((err) => {
