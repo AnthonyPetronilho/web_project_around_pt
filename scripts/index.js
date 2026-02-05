@@ -26,7 +26,6 @@ function renderCard(cardData) {
     },
     handleImageClick,
     (cardInstance) => {
-      // abre o popup e define o que acontece ao confirmar
       deletePopup.setSubmitAction(() => {
         api
           .deleteCard(cardInstance.getId())
@@ -70,7 +69,7 @@ api
 
 //popup do avatar:
 const avatarPopup = new PopupWithForm("#avatar-popup", (inputValues) => {
-  avatarForm.renderLoading(true);
+  avatarPopup.renderLoading(true);
 
   api
     .updateAvatar(inputValues.avatar)
