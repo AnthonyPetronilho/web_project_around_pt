@@ -70,6 +70,8 @@ api
 
 //popup do avatar:
 const avatarPopup = new PopupWithForm("#avatar-popup", (inputValues) => {
+  avatarForm.renderLoading(true);
+
   api
     .updateAvatar(inputValues.avatar)
     .then((updatedUserData) => {
@@ -80,7 +82,10 @@ const avatarPopup = new PopupWithForm("#avatar-popup", (inputValues) => {
       });
       avatarPopup.close();
     })
-    .catch((err) => console.log("Erro ao atualizar avatar:", err));
+    .catch((err) => console.log("Erro ao atualizar avatar:", err))
+    .finally(() => {
+      avatarPopup.renderLoading(false);
+    });
 });
 
 avatarPopup.setEventListeners();
@@ -97,6 +102,8 @@ avatarValidator.enableValidation();
 
 //editar perfil
 const editPopup = new PopupWithForm("#edit-popup", (inputValues) => {
+  editPopup.renderLoading(true);
+
   api
     .updateUserInfo({
       name: inputValues.name,
@@ -106,11 +113,13 @@ const editPopup = new PopupWithForm("#edit-popup", (inputValues) => {
       userInfo.setUserInfo({
         name: updatedUserData.name,
         job: updatedUserData.about,
+        avatar: updatedUserData.avatar,
       });
       editPopup.close();
     })
-    .catch((err) => {
-      console.log(err);
+    .catch((err) => console.log(err))
+    .finally(() => {
+      editPopup.renderLoading(false);
     });
 });
 
@@ -131,6 +140,8 @@ editButton.addEventListener("click", () => {
 
 //novo card
 const newCardPopup = new PopupWithForm("#new-card-popup", (inputValues) => {
+  newCardPopup.renderLoading(true);
+
   const name = inputValues["place-name"];
   const link = inputValues.link;
 
@@ -142,6 +153,9 @@ const newCardPopup = new PopupWithForm("#new-card-popup", (inputValues) => {
     })
     .catch((err) => {
       console.log("Erro ao adicionar cartão:", err);
+    })
+    .finally(() => {
+      newCardPopup.renderLoading(false);
     });
 });
 
