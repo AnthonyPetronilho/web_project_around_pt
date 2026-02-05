@@ -44,7 +44,6 @@ class Card {
   }
 
   _handleLikeButton = () => {
-    this._handleDeleteClick(this);
     const isCurrentlyLiked = this._likeButton.classList.contains(
       "card__like-button_is-active",
     );
@@ -69,9 +68,7 @@ class Card {
     this._deleteButton.addEventListener("click", () => {
       this._handleDeleteButton();
     });
-    this._cardImage.addEventListener("click", () => {
-      this._handleCardClick(this._name, this._link);
-    });
+    this._deleteButton.addEventListener("click", this._handleDeleteButton);
   }
 
   getId() {
