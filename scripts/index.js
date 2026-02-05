@@ -17,7 +17,7 @@ const handleImageClick = (name, link) => {
 const cardsContainer = document.querySelector(".cards__list");
 
 function renderCard(cardData) {
-  const cardElement = new Card(
+  const card = new Card(
     {
       name: cardData.name,
       link: cardData.link,
@@ -25,8 +25,22 @@ function renderCard(cardData) {
       isLiked: cardData.isLiked,
     },
     handleImageClick,
-  ).generateCard();
+    (cardInstance) => {
+      // abre o popup e define o que acontece ao confirmar
+      deletePopup.setSubmitAction(() => {
+        api
+          .deleteCard(cardInstance.getId())
+          .then(() => {
+            cardInstance.removeCard();
+            deletePopup.close();
+          })
+          .catch((err) => console.log("Erro ao deletar:", err));
+      });
 
+      deletePopup.open();
+    },
+  );
+  const cardElement = card.generateCard();
   cardsContainer.prepend(cardElement);
 }
 
@@ -146,3 +160,6 @@ profileValidator.enableValidation();
 
 const cardValidator = new FormValidator(validationConfig, newCardForm);
 cardValidator.enableValidation();
+
+const deletePopup = new PopupWithConfirmation("#delete-popup");
+deletePopup.setEventListeners();

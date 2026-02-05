@@ -1,12 +1,13 @@
 import api from "./Api.js";
 
 class Card {
-  constructor({ name, link, id, isLiked }, handleCardClick) {
+  constructor({ name, link, id, isLiked }, handleCardClick, handleDeleteClick) {
     this._name = name;
     this._link = link;
     this._id = id;
     this._isLiked = isLiked;
     this._handleCardClick = handleCardClick;
+    this._handleDeleteClick = handleDeleteClick;
   }
   //this._cardSelector
   //this._imageClick
@@ -31,6 +32,7 @@ class Card {
     this._setEventListeners();
     return this._element;
   }
+
   //achar o id do botão de curtir
 
   _getTemplate() {
@@ -42,6 +44,7 @@ class Card {
   }
 
   _handleLikeButton = () => {
+    this._handleDeleteClick(this);
     const isCurrentlyLiked = this._likeButton.classList.contains(
       "card__like-button_is-active",
     );
@@ -57,12 +60,27 @@ class Card {
       .catch((err) => console.log(err));
   };
 
+  _handleDeleteButton = () => {
+    this._handleDeleteClick(this);
+  };
+
   _setEventListeners() {
     this._likeButton.addEventListener("click", this._handleLikeButton);
-    this._deleteButton.addEventListener("click", this._handleDeleteButton);
+    this._deleteButton.addEventListener("click", () => {
+      this._handleDeleteButton();
+    });
     this._cardImage.addEventListener("click", () => {
       this._handleCardClick(this._name, this._link);
     });
+  }
+
+  getId() {
+    return this._id;
+  }
+
+  removeCard() {
+    this._element.remove();
+    this._element = null;
   }
 }
 
