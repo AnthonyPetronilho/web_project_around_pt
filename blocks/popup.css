@@ -145,13 +145,36 @@
   color: #ff0000;
   font-size: 12px;
   line-height: 1.3;
-  transition: opacity 0.12s ease, transform 0.12s ease;
+  transition:
+    opacity 0.12s ease,
+    transform 0.12s ease;
   pointer-events: none;
 }
 
 .popup__input-error_active {
   opacity: 1;
   transform: translateY(0);
+}
+
+.popup__content_type_confirm {
+  max-width: 430px;
+  min-height: auto;
+  padding: 34px 36px;
+}
+
+#delete-popup .popup__title {
+  font-size: 24px;
+  font-weight: 900;
+  line-height: 29px;
+  margin: 0 0 38px 0;
+}
+
+#delete-popup .popup__form {
+  margin-top: 0;
+}
+
+#delete-popup .popup__button {
+  margin-top: 0;
 }
 
 .popup__form .popup__button:disabled,
