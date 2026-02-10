@@ -55,6 +55,18 @@ const handleDeleteClick = (cardInstance) => {
   deletePopup.open();
 };
 
+const handleLikeClick = (cardInstance) => {
+  const request = cardInstance.isLiked()
+    ? api.unlikeCard(cardInstance.getId())
+    : api.likeCard(cardInstance.getId());
+
+  request
+    .then(() => {
+      cardInstance.toggleLike();
+    })
+    .catch((err) => console.log("Erro no like:", err));
+};
+
 const cardsSection = new Section(
   {
     items: [],
@@ -68,6 +80,7 @@ const cardsSection = new Section(
         },
         handleImageClick,
         handleDeleteClick,
+        handleLikeClick,
       );
 
       return card.generateCard();
