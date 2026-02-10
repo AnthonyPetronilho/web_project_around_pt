@@ -1,5 +1,3 @@
-const initialCards = [];
-
 const validationConfig = {
   inputSelector: ".popup__input",
   submitButtonSelector: ".popup__button",
